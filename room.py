@@ -10,7 +10,7 @@ def create_blocks(filename: str):
     collision_blocks = pygame.sprite.Group()
     spritesheet = SpriteSheet("tiles_spritesheet.png")
     scale_block_size = 55
-    spritesheet_block_size = 72  # 72 x 72
+    spritesheet_block_size = 70  # 70 x 70
     file_path = get_path_name("maps", filename)
     with open(file_path, 'r') as f:
         lines = f.readlines()

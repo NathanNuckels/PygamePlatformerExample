@@ -20,7 +20,7 @@ SCREEN_WIDTH = 880
 SCREEN_HEIGHT = 713
 
 # X, Y = Col, Row
-GRASS_BLOCK = (9, 0) #g
+GRASS_BLOCK = (7, 8) #g
 ITEM_BLOCK = (0, 0) #i
 TORCH_BLOCK = (1, 2) #t
 CRATE_BLOCK = (0,11) #c
