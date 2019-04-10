@@ -20,4 +20,4 @@ SCREEN_WIDTH = 880
 SCREEN_HEIGHT = 713
 
 # X, Y = Col, Row
-
+SKY = (7,3)

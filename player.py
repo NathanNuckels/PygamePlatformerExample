@@ -37,9 +37,6 @@ class Player(pygame.sprite.Sprite):
         self.space = keys[pygame.K_SPACE]
         if self.up:
             self.jump()
-    def draw(self,surface):
-        self.rect = self.rect.clamp(surface.get_rect())
-        surface.blit(self.image,self.rect)
 
     def calc_gravity(self):
         '''Calculate gravity'''
@@ -98,3 +95,7 @@ class Player(pygame.sprite.Sprite):
             elif self.delta_y > 0:
                 self.rect.bottom = block.rect.top
             self.delta_y = 0
+        if self.rect.right >= constants.SCREEN_WIDTH:
+            self.rect.right = constants.SCREEN_WIDTH
+        elif self.rect.left <= 0:
+            self.rect.left = 0

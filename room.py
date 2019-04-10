@@ -45,8 +45,15 @@ def create_blocks(filename: str):
                 can_collide = block_mapping[char][1]
                 image = get_block_sprite(image,spritesheet_block_size,scale_block_size,spritesheet)
                 block = Block(x, y, scale_block_size, scale_block_size, image, can_collide)
+                if char != ".":
+                    bg_image = get_block_sprite(constants.SKY, spritesheet_block_size, scale_block_size, spritesheet)
+                    bg_block = Block(x, y, scale_block_size, scale_block_size, bg_image, False)
+                    background_blocks.add(bg_block)
                 if can_collide:
                     collision_blocks.add(block)
+                    bg_image = get_block_sprite(constants.SKY, spritesheet_block_size, scale_block_size, spritesheet)
+                    bg_block = Block(x, y, scale_block_size, scale_block_size, bg_image, False)
+                    background_blocks.add(bg_block)
                 else:
                     background_blocks.add(block)
                 col += 1

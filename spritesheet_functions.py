@@ -22,7 +22,7 @@ class SpriteSheet(object):
         """ Constructor. Pass in the file name of the sprite sheet. """
 
         file_path = get_path_name("images", filename)
-        self.sprite_sheet = pygame.image.load(file_path).convert()
+        self.sprite_sheet = pygame.image.load(file_path).convert_alpha()
 
     def get_image(self, col, row, width, height, scale=1, x=-1, y=-1):
         """ Grab a single image out of a larger spritesheet
