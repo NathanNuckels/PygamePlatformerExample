@@ -1,0 +1,10 @@
+SKY   =   .   /   (7,3) /   False
+GRASS_BLOCK =   g   /   (7,8)
+ITEM_BLOCK  =   i   /   (0,0)
+TORCH_BLOCK =   t   /   (1,2)   /   False
+CRATE_BLOCK =   c   /   (0,11)
+WARNING_BLOCK   =   v   /   (0,5)
+EXIT_SIGN   =   e   /   (4,5)
+BKEY_BLOCK  =   b   /   (6,7)
+LGRASS  =   1   /   (8,10)
+RGRASS  =   2   /   (8,8)

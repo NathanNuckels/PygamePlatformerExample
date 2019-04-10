@@ -1,6 +1,7 @@
 import pygame
 
 import constants
+from spritesheet_functions import SpriteSheet
 
 
 class Player(pygame.sprite.Sprite):
@@ -9,14 +10,14 @@ class Player(pygame.sprite.Sprite):
     up = False
     down = False
     scale = 1.75
+    space=False
 
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y):
         super().__init__()
-        # self.image = pygame.image.load("metabee_spritesheet.png").convert()
-        self.image = pygame.Surface([w, h])
-        self.image.fill(constants.TEAL)
-
+        spritesheet = SpriteSheet("tiles_spritesheet.png")
+        self.image = spritesheet.get_image(0,0,70,70,0.75)
         self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = x
         self.rect.y = y
 
@@ -25,29 +26,20 @@ class Player(pygame.sprite.Sprite):
         self.delta_y = 5
         self.room = None
 
-    def key_down(self, key):
-        if key == pygame.K_LEFT:
-            self.left = True
-        elif key == pygame.K_RIGHT:
-            self.right = True
-        elif key == pygame.K_UP:
-            self.up = True
-            self.jump()
-        elif key == pygame.K_DOWN:
-            self.down = True
-
-    def key_up(self, key):
-        if key == pygame.K_LEFT:
-            self.left = False
-        elif key == pygame.K_RIGHT:
-            self.right = False
-        elif key == pygame.K_UP:
-            self.up = False
-        elif key == pygame.K_DOWN:
-            self.down = False
-
     def set_room(self, room):
         self.room = room
+
+    def process_keys(self,keys):
+        self.down = keys[pygame.K_DOWN]
+        self.up = keys[pygame.K_UP]
+        self.left = keys[pygame.K_LEFT]
+        self.right = keys[pygame.K_RIGHT]
+        self.space = keys[pygame.K_SPACE]
+        if self.up:
+            self.jump()
+    def draw(self,surface):
+        self.rect = self.rect.clamp(surface.get_rect())
+        surface.blit(self.image,self.rect)
 
     def calc_gravity(self):
         '''Calculate gravity'''
