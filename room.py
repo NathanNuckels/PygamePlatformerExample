@@ -8,11 +8,20 @@ def create_block_mapping():
     file_path = get_path_name("maps","block_mapping.txt")
     with open(file_path,'r') as f:
         lines = f.readlines()
+        block_mapping = {}
         for line in lines:
             line = line.strip()
             line = line.replace("\t","")
             line = line.replace(" ","")
-            print(line)
+            line = line.split("/")
+            location = eval(line[1])
+            letter = line[0].split("=")[1]
+            if (len(line)) == 2:
+                block = (location,True)
+            else:
+                block = (location,False)
+            block_mapping[letter] = block
+        return block_mapping
 
 
 def create_blocks(filename: str):
@@ -22,7 +31,7 @@ def create_blocks(filename: str):
     scale_block_size = 55
     spritesheet_block_size = 70  # 70 x 70
     file_path = get_path_name("maps", filename)
-    create_block_mapping()
+    block_mapping = create_block_mapping()
     with open(file_path, 'r') as f:
         lines = f.readlines()
         row = 0
@@ -32,28 +41,8 @@ def create_blocks(filename: str):
             for char in line:
                 x = col * scale_block_size
                 y = row * scale_block_size
-                can_collide = True
-                image = None
-                if char == ".":
-                    can_collide = False
-                    image = constants.SKY
-                elif char == "g":
-                    image = constants.GRASS_BLOCK
-                elif char == "1":
-                    image = constants.LGRASS
-                elif char == "2":
-                    image = constants.RGRASS
-                elif char == "t":
-                    can_collide = False
-                    image = constants.TORCH_BLOCK
-                elif char == "i":
-                    image = constants.ITEM_BLOCK
-                elif char == "b":
-                    image = constants.BKEY_BLOCK
-                elif char == "c":
-                    image = constants.CRATE_BLOCK
-                elif char == "v":
-                    image = constants.WARNING_BLOCK
+                image = block_mapping[char][0]
+                can_collide = block_mapping[char][1]
                 image = get_block_sprite(image,spritesheet_block_size,scale_block_size,spritesheet)
                 block = Block(x, y, scale_block_size, scale_block_size, image, can_collide)
                 if can_collide:
