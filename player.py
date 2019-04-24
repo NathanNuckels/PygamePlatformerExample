@@ -1,6 +1,7 @@
 import pygame
 
 import constants
+from anamation import Anamation
 from spritesheet_functions import SpriteSheet
 
 
@@ -14,8 +15,9 @@ class Player(pygame.sprite.Sprite):
 
     def __init__(self, x, y):
         super().__init__()
-        spritesheet = SpriteSheet("tiles_spritesheet.png")
-        self.image = spritesheet.get_image(0,0,70,70,0.75)
+        #self.image = spritesheet.get_image(6,7,70,70,0.75)
+        self.anamation = Anamation("metabee/Metabee_SpriteSheet.png", "Metabee.txt",1.5)
+        self.image = self.anamation.get_image("Walking")
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = x
@@ -57,10 +59,11 @@ class Player(pygame.sprite.Sprite):
         self.rect.y -= 2
         # if it is ok to jump set speed t go up
         if len(platform_hit_list) > 0 or self.rect.bottom >= constants.SCREEN_HEIGHT:
-            self.delta_y = -10
+            self.delta_y = -11
 
     # Use booleans for movement and update based on booleans in update method
     def update(self):
+        self.image = self.anamation.get_image("Walking")
         #set gravity
         self.calc_gravity()
         """ Move the player. """
@@ -99,3 +102,5 @@ class Player(pygame.sprite.Sprite):
             self.rect.right = constants.SCREEN_WIDTH
         elif self.rect.left <= 0:
             self.rect.left = 0
+
+        self.anamation.update()
