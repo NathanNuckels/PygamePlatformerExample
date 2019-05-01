@@ -3,20 +3,29 @@ import pygame
 from spritesheet_functions import get_path_name
 
 
-def get_anamations(spritesheet, textfile, scale):
+def get_anamations(spritesheet, hitbox, textfile, scale):
     spritesheet = get_path_name("images", spritesheet)
     spritesheet = pygame.image.load(spritesheet).convert_alpha()
+    hitbox = get_path_name("images",hitbox)
+    hitbox = pygame.image.load(hitbox).convert_alpha()
     anamations = {}
+    anamations_hitbox = {}
     with open(get_path_name("animations", textfile)) as f:
         lines = f.readlines()
-        # hardcoded idle anamation
-        anamationName = lines[6].strip()
-        dimensions = lines[7].strip().split("x")
-        dimensions = [int(x) for x in dimensions]
-        starting_x = 0
-        starting_y = 107
-        anamations[anamationName] = get_anamation_row(dimensions, spritesheet, scale, starting_x, starting_y)
-    return anamations
+        i=0
+        starting_y = 0
+        while i < len(lines):
+            # hardcoded idle anamation
+            anamationName = lines[i].strip()
+            dimensions = lines[i+1].strip().split("x")
+            dimensions = [int(x) for x in dimensions]
+            dashes = lines[i+2]
+            starting_x = 0
+            anamations[anamationName] = get_anamation_row(dimensions, spritesheet, scale, starting_x, starting_y)
+            anamations_hitbox[anamationName] = get_anamation_row(dimensions,hitbox,scale,starting_x,starting_y)
+            starting_y += dimensions[1] #add the height of the previous row
+            i+=3
+    return anamations, anamations_hitbox
 
 
 def clock():
@@ -41,17 +50,18 @@ def get_anamation_row(dimensions: list, spritesheet, scale, sx, sy):
 
 def get_hitbox_image(image):
     pxarray = pygame.PixelArray(image)
-    print("PIXEL ARRAY",pxarray)
+    black_white_array = pxarray.extract(0xFFFFFF)
+    print(black_white_array)
+    return black_white_array.make_surface()
 
 
 class Anamation:
-    def __init__(self, spritesheet, textfile, scale):
-        self.anamations = get_anamations(spritesheet, textfile, scale)
+    def __init__(self, spritesheet, hitbox, textfile, scale):
+        self.anamations,self.anamations_hitbox = get_anamations(spritesheet,hitbox, textfile, scale)
         self.anamation_speed = 80  # ms
         self.curent_frame = 0
         self.time_of_next_frame = clock() + self.anamation_speed
-        self.anamation_name = "Walking"
-        get_hitbox_image(self.anamations[self.anamation_name][0])
+        self.anamation_name = "Attack-1"
 
     def update_anamation(self,name):
         if self.anamation_name != name:
@@ -64,5 +74,5 @@ class Anamation:
             self.curent_frame = (self.curent_frame + 1) % len(self.anamations[self.anamation_name])
             self.time_of_next_frame += self.anamation_speed
 
-    def get_image(self, anamations_name):
-        return self.anamations[anamations_name][self.curent_frame]
+    def get_image(self):
+        return self.anamations[self.anamation_name][self.curent_frame], self.anamations_hitbox[self.anamation_name][self.curent_frame]

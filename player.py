@@ -1,7 +1,7 @@
 import pygame
 
 import constants
-from anamation import Anamation
+from anamation import Anamation, get_hitbox_image
 from spritesheet_functions import SpriteSheet
 
 
@@ -16,8 +16,8 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
         #self.image = spritesheet.get_image(6,7,70,70,0.75)
-        self.anamation = Anamation("metabee/Metabee_SpriteSheet.png", "Metabee.txt",1.5)
-        self.image = self.anamation.get_image("Walking")
+        self.anamation = Anamation("metabee/Metabee_SpriteSheet.png", "metabee/Metabee_Hitbox.png",  "Metabee.txt",1.5)
+        self.image = self.anamation.get_image()[0]
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = x
@@ -63,7 +63,11 @@ class Player(pygame.sprite.Sprite):
 
     # Use booleans for movement and update based on booleans in update method
     def update(self):
-        self.image = self.anamation.get_image("Walking")
+        self.image,colliton_image = self.anamation.get_image()
+        newrect = self.image.get_rect()
+        self.rect.width = newrect.width
+        self.rect.height = newrect.height
+        #self.image = get_hitbox_image(self.image)
         #set gravity
         self.calc_gravity()
         """ Move the player. """
